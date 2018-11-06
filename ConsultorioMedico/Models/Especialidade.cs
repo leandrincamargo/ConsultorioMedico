@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ConsultorioMedico.Models
@@ -14,8 +15,9 @@ namespace ConsultorioMedico.Models
             this.Medico = new HashSet<Medico>();
             this.Consulta = new HashSet<Consulta>();
         }
-    
+        [Key]
         public int EspecialidadeID { get; set; }
+        [Required]
         public string Nome { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

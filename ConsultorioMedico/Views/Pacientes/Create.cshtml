@@ -117,27 +117,12 @@
     <script>
         $('#CPF').mask('000.000.000-00', { placeholder: "___.___.___-__" });
         $('#CEP').mask('00000-000', { placeholder: "_____-___" });
-        $("#CidadeID").empty();
-        $("#CidadeID").append('<option value>Selecione...</option>');
-        $("#EstadoID").ready(function () {
-            $.ajax({
-                url: "/Pacientes/ObterCidades/" + 1,
-                success: function (data) {
-                    $("#CidadeID").empty();
-                    $("#CidadeID").append('<option value>Selecione...</option>');
-                    $.each(data, function (index, element) {
-                        $("#CidadeID").append('<option value="' + element.Value + '">' + element.Text + '</option>');
-                    });
-                }
-            });
-        });
         $("#EstadoID").change(function () {
             var id = $(this).find(":selected").val();
             $.ajax({
                 url: "/Pacientes/ObterCidades/" + id,
                 success: function (data) {
                     $("#CidadeID").empty();
-                    $("#CidadeID").append('<option value>Selecione...</option>');
                     $.each(data, function (index, element) {
                         $("#CidadeID").append('<option value="' + element.Value + '">' + element.Text + '</option>');
                     });

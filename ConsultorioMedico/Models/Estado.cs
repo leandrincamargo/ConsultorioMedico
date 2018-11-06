@@ -17,7 +17,9 @@ namespace ConsultorioMedico.Models
         }
         [Key]
         public int EstadoID { get; set; }
+        [Required]
         public string UF { get; set; }
+        [Required]
         public string Nome { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

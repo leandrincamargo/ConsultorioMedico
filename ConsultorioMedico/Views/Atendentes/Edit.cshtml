@@ -102,7 +102,6 @@
                 url: "/Atendentes/ObterCidades/" + id,
                 success: function (data) {
                     $("#CidadeID").empty();
-                    $("#CidadeID").append('<option value>Selecione...</option>');
                     $.each(data, function (index, element) {
                         $("#CidadeID").append('<option value="' + element.Value + '">' + element.Text + '</option>');
                     });

@@ -38,9 +38,9 @@ namespace ConsultorioMedico.Controllers
             }
 
             ViewBag.CurrentFilter = searchString;
-            
+
             var consultas = from s in db.Consulta.Include(c => c.Medico).Include(c => c.Paciente).Include(c => c.Especialidade).Include(c => c.Convenio).Include(c => c.Atendente)
-            select s;
+                            select s;
             if (!String.IsNullOrEmpty(searchString))
             {
                 consultas = consultas.Where(s => s.Paciente.Nome.Contains(searchString));
@@ -113,7 +113,7 @@ namespace ConsultorioMedico.Controllers
         // GET: Consultas/Create
         public ActionResult Create()
         {
-            ViewBag.MedicoID = new SelectList(db.Medico, "FuncionarioID", "Nome");
+            ViewBag.MedicoID = new SelectList(db.Medico.Where(m => m.EspecialidadeID == db.Especialidade.FirstOrDefault().EspecialidadeID), "FuncionarioID", "Nome");
             ViewBag.PacienteID = new SelectList(db.Paciente, "PacienteID", "Nome");
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome");
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome");

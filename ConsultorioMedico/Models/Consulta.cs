@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ConsultorioMedico.Models
@@ -13,13 +14,32 @@ namespace ConsultorioMedico.Models
         {
             this.Prontuario = new HashSet<Prontuario>();
         }
-    
+
+        [Key]
         public int ConsultaID { get; set; }
-        public System.DateTime dataConsulta { get; set; }
-        public int MedicoID { get; set; }
+        [Required]
+        [Display(Name = "Paciente")]
         public int PacienteID { get; set; }
+        [Required]
+        [Display(Name = "Especialidade")]
         public int EspecialidadeID { get; set; }
+        [Required]
+        [Display(Name = "Medico")]
+        public int MedicoID { get; set; }
+        [Required]
+        [Display(Name = "Data de Consulta")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public System.DateTime dataConsulta { get; set; }
+        [Required]
+        [Display(Name = "Horario da Consulta")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime horarioConsulta { get; set; }
+        [Required]
+        [Display(Name = "Convenio")]
         public int ConvenioID { get; set; }
+        [Required]
+        [Display(Name = "Atendente")]
         public int AtendenteID { get; set; }
     
         public virtual Medico Medico { get; set; }

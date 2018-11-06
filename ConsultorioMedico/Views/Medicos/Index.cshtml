@@ -24,6 +24,9 @@
             @Html.ActionLink("Nome", "Index", new { sortOrder = ViewBag.NomeSortParm })
         </th>
         <th>
+            @Html.ActionLink("Login", "Index", new { sortOrder = ViewBag.LoginSortParm })
+        </th>
+        <th>
             Data de Nascimento
         </th>
         <th>
@@ -33,44 +36,53 @@
             CRM
         </th>
         <th>
-            Horario de Atendimento
+            Horario de Entrada
         </th>
         <th>
-            Especialidade
+            Horario de Saida
+        </th>
+        <th>
+            @Html.ActionLink("Especialidade", "Index", new { sortOrder = ViewBag.EspecialidadeSortParm })
         </th>
         <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FuncionarioID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CPF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nascimento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CRM)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.horarioAtendimento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Especialidade.Nome)
-            </td>
-            <td>
-                @Html.ActionLink("Editar", "Edit", new { id = item.PessoaID }) |
-                @Html.ActionLink("Detalhes", "Details", new { id = item.PessoaID }) |
-                @Html.ActionLink("Deletar", "Delete", new { id = item.PessoaID })
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FuncionarioID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Login)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CPF)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nascimento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CRM)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.horarioEntrada)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.horarioSaida)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Especialidade.Nome)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = item.PessoaID }) |
+            @Html.ActionLink("Detalhes", "Details", new { id = item.PessoaID }) |
+            @Html.ActionLink("Deletar", "Delete", new { id = item.PessoaID })
+        </td>
+    </tr>
     }
 
 </table>

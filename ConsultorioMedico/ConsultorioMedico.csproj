@@ -138,16 +138,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AtendentesController.cs" />
+    <Compile Include="Controllers\ConsultasController.cs" />
     <Compile Include="Controllers\ConveniosController.cs" />
     <Compile Include="Controllers\EspecialidadesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MedicosController.cs" />
     <Compile Include="Controllers\PacientesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201811060232397_initial.cs" />
-    <Compile Include="Migrations\201811060232397_initial.Designer.cs">
-      <DependentUpon>201811060232397_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Atendente.cs" />
@@ -181,6 +179,9 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Cargos.sql" />
+    <Content Include="Scripts\Cidades.sql" />
+    <Content Include="Scripts\Estados.sql" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -228,6 +229,16 @@
     <Content Include="Views\Pacientes\Details.cshtml" />
     <Content Include="Views\Pacientes\Edit.cshtml" />
     <Content Include="Views\Pacientes\Index.cshtml" />
+    <Content Include="Views\Medicos\Create.cshtml" />
+    <Content Include="Views\Medicos\Delete.cshtml" />
+    <Content Include="Views\Medicos\Details.cshtml" />
+    <Content Include="Views\Medicos\Edit.cshtml" />
+    <Content Include="Views\Medicos\Index.cshtml" />
+    <Content Include="Views\Consultas\Create.cshtml" />
+    <Content Include="Views\Consultas\Delete.cshtml" />
+    <Content Include="Views\Consultas\Details.cshtml" />
+    <Content Include="Views\Consultas\Edit.cshtml" />
+    <Content Include="Views\Consultas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -239,11 +250,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201811060232397_initial.resx">
-      <DependentUpon>201811060232397_initial.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

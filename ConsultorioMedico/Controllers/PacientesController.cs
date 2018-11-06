@@ -22,6 +22,7 @@ namespace ConsultorioMedico.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.IDSortParm = sortOrder == "PacienteID" ? "id_desc" : "PacienteID";
             ViewBag.NomeSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.LoginSortParm = sortOrder == "Login" ? "login_desc" : "Login";
 
             if (searchString != null)
             {
@@ -51,6 +52,12 @@ namespace ConsultorioMedico.Controllers
                 case "PacienteID":
                     pacientes = pacientes.OrderBy(s => s.PacienteID);
                     break;
+                case "login_desc":
+                    pacientes = pacientes.OrderByDescending(s => s.Login);
+                    break;
+                case "Login":
+                    pacientes = pacientes.OrderBy(s => s.Login);
+                    break;
                 default:
                     pacientes = pacientes.OrderBy(s => s.Nome);
                     break;
@@ -67,7 +74,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Paciente paciente = await db.Paciente.FindAsync(id);
+            Paciente paciente = await db.Paciente.Where(p => p.PacienteID == id).FirstAsync();
             if (paciente == null)
             {
                 return HttpNotFound();
@@ -78,8 +85,8 @@ namespace ConsultorioMedico.Controllers
         // GET: Pacientes/Create
         public ActionResult Create()
         {
-            ViewBag.CidadeID = new SelectList(db.Cidade, "CidadeID", "Nome");
             ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF");
+            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == db.Estado.FirstOrDefault().EstadoID), "CidadeID", "Nome");
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome");
             return View();
         }
@@ -99,7 +106,7 @@ namespace ConsultorioMedico.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CidadeID = new SelectList(db.Cidade, "CidadeID", "Nome", paciente.CidadeID);
+            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == paciente.EstadoID), "CidadeID", "Nome", paciente.CidadeID);
             ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", paciente.EstadoID);
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome", paciente.ConvenioID);
             return View(paciente);
@@ -112,12 +119,12 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Paciente paciente = await db.Paciente.FindAsync(id);
+            Paciente paciente = await db.Paciente.Where(p => p.PacienteID == id).FirstAsync();
             if (paciente == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CidadeID = new SelectList(db.Cidade, "CidadeID", "Nome", paciente.CidadeID);
+            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == paciente.EstadoID), "CidadeID", "Nome", paciente.CidadeID);
             ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", paciente.EstadoID);
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome", paciente.ConvenioID);
             return View(paciente);
@@ -136,7 +143,7 @@ namespace ConsultorioMedico.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.CidadeID = new SelectList(db.Cidade, "CidadeID", "Nome", paciente.CidadeID);
+            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == paciente.EstadoID), "CidadeID", "Nome", paciente.CidadeID);
             ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", paciente.EstadoID);
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome", paciente.ConvenioID);
             return View(paciente);
@@ -149,7 +156,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Paciente paciente = await db.Paciente.FindAsync(id);
+            Paciente paciente = await db.Paciente.Where(p => p.PacienteID == id).FirstAsync();
             if (paciente == null)
             {
                 return HttpNotFound();
@@ -162,7 +169,7 @@ namespace ConsultorioMedico.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Paciente paciente = await db.Paciente.FindAsync(id);
+            Paciente paciente = await db.Paciente.Where(p => p.PacienteID == id).FirstAsync();
             db.Pessoa.Remove(paciente);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

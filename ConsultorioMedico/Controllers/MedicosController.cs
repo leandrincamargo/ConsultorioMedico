@@ -24,6 +24,8 @@ namespace ConsultorioMedico.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.IDSortParm = sortOrder == "MedicoID" ? "id_desc" : "MedicoID";
             ViewBag.NomeSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.LoginSortParm = sortOrder == "Login" ? "login_desc" : "Login";
+            ViewBag.EspecialidadeSortParm = sortOrder == "Especialidade" ? "especialidade_desc" : "Especialidade";
 
             if (searchString != null)
             {
@@ -53,6 +55,18 @@ namespace ConsultorioMedico.Controllers
                 case "MedicoID":
                     medicos = medicos.OrderBy(s => s.FuncionarioID);
                     break;
+                case "login_desc":
+                    medicos = medicos.OrderByDescending(s => s.Login);
+                    break;
+                case "Login":
+                    medicos = medicos.OrderBy(s => s.Login);
+                    break;
+                case "especialidade_desc":
+                    medicos = medicos.OrderByDescending(s => s.Especialidade.Nome);
+                    break;
+                case "Especialidade":
+                    medicos = medicos.OrderBy(s => s.Especialidade.Nome);
+                    break;
                 default:
                     medicos = medicos.OrderBy(s => s.Nome);
                     break;
@@ -68,7 +82,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Medico medico = await db.Medico.FindAsync(id);
+            Medico medico = await db.Medico.Where(p => p.FuncionarioID == id).FirstAsync();
             if (medico == null)
             {
                 return HttpNotFound();
@@ -79,7 +93,7 @@ namespace ConsultorioMedico.Controllers
         // GET: Medicos/Create
         public ActionResult Create()
         {
-            ViewBag.CidadeID = new SelectList(db.Cidade, "CidadeID", "Nome");
+            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == db.Estado.FirstOrDefault().EstadoID), "CidadeID", "Nome");
             ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF");
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome");
             return View();
@@ -90,8 +104,9 @@ namespace ConsultorioMedico.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "PessoaID,Nome,Endereco,Nascimento,CPF,CEP,Numero,CidadeID,EstadoID,FuncionarioID,Cargo,CRM,EspecialidadeID,horarioAtendimento")] Medico medico)
+        public async Task<ActionResult> Create([Bind(Include = "PessoaID,Nome,Login,Senha,Endereco,Nascimento,CPF,CEP,Numero,CidadeID,EstadoID,FuncionarioID,Cargo,CRM,EspecialidadeID,horarioEntrada,horarioSaida")] Medico medico)
         {
+            medico.CargoID = db.Cargo.Where(s => s.Nome.Contains("Medico")).First().CargoID;
             if (ModelState.IsValid)
             {
                 db.Pessoa.Add(medico);
@@ -99,7 +114,7 @@ namespace ConsultorioMedico.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CidadeID = new SelectList(db.Cidade, "CidadeID", "Nome", medico.CidadeID);
+            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == medico.EstadoID), "CidadeID", "Nome", medico.CidadeID);
             ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", medico.EstadoID);
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome", medico.EspecialidadeID);
             return View(medico);
@@ -112,12 +127,12 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Medico medico = await db.Medico.FindAsync(id);
+            Medico medico = await db.Medico.Where(p => p.FuncionarioID == id).FirstAsync();
             if (medico == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CidadeID = new SelectList(db.Cidade, "CidadeID", "Nome", medico.CidadeID);
+            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == medico.EstadoID), "CidadeID", "Nome", medico.CidadeID);
             ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", medico.EstadoID);
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome", medico.EspecialidadeID);
             return View(medico);
@@ -136,7 +151,7 @@ namespace ConsultorioMedico.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.CidadeID = new SelectList(db.Cidade, "CidadeID", "Nome", medico.CidadeID);
+            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == medico.EstadoID), "CidadeID", "Nome", medico.CidadeID);
             ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", medico.EstadoID);
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome", medico.EspecialidadeID);
             return View(medico);
@@ -149,7 +164,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Medico medico = await db.Medico.FindAsync(id);
+            Medico medico = await db.Medico.Where(p => p.FuncionarioID == id).FirstAsync();
             if (medico == null)
             {
                 return HttpNotFound();
@@ -162,7 +177,7 @@ namespace ConsultorioMedico.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Medico medico = await db.Medico.FindAsync(id);
+            Medico medico = await db.Medico.Where(p => p.FuncionarioID == id).FirstAsync();
             db.Pessoa.Remove(medico);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

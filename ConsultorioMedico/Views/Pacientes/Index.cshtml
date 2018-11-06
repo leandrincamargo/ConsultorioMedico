@@ -24,6 +24,9 @@
             @Html.ActionLink("Nome", "Index", new { sortOrder = ViewBag.NomeSortParm })
         </th>
         <th>
+            @Html.ActionLink("Login", "Index", new { sortOrder = ViewBag.LoginSortParm })
+        </th>
+        <th>
             CPF
         </th>
         <th>
@@ -37,28 +40,31 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PacienteID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CPF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nascimento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Convenio.Nome)
-            </td>
-            <td>
-                @Html.ActionLink("Editar", "Edit", new { id = item.PessoaID }) |
-                @Html.ActionLink("Detalhes", "Details", new { id = item.PessoaID }) |
-                @Html.ActionLink("Deletar", "Delete", new { id = item.PessoaID })
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PacienteID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Login)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CPF)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nascimento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Convenio.Nome)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = item.PessoaID }) |
+            @Html.ActionLink("Detalhes", "Details", new { id = item.PessoaID }) |
+            @Html.ActionLink("Deletar", "Delete", new { id = item.PessoaID })
+        </td>
+    </tr>
     }
 
 </table>

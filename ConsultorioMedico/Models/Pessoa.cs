@@ -38,6 +38,7 @@ namespace ConsultorioMedico.Models
         [DataType(DataType.Password)]
         public string Senha { get; set; }
         [Required]
+        [Display(Name = "Cargo")]
         public int CargoID { get; set; }
 
         public virtual Cidade Cidade { get; set; }

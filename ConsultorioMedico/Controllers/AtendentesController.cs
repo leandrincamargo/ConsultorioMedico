@@ -22,6 +22,7 @@ namespace ConsultorioMedico.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.IDSortParm = sortOrder == "AtendenteID" ? "id_desc" : "AtendenteID";
             ViewBag.NomeSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.LoginSortParm = sortOrder == "Login" ? "login_desc" : "Login";
 
             if (searchString != null)
             {
@@ -51,6 +52,12 @@ namespace ConsultorioMedico.Controllers
                 case "AtendenteID":
                     atendentes = atendentes.OrderBy(s => s.FuncionarioID);
                     break;
+                case "login_desc":
+                    atendentes = atendentes.OrderByDescending(s => s.Login);
+                    break;
+                case "Login":
+                    atendentes = atendentes.OrderBy(s => s.Login);
+                    break;
                 default:
                     atendentes = atendentes.OrderBy(s => s.Nome);
                     break;
@@ -67,7 +74,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Atendente atendente = await db.Atendente.FindAsync(id);
+            Atendente atendente = await db.Atendente.Where(p => p.FuncionarioID == id).FirstAsync();
             if (atendente == null)
             {
                 return HttpNotFound();
@@ -78,7 +85,7 @@ namespace ConsultorioMedico.Controllers
         // GET: Atendentes/Create
         public ActionResult Create()
         {
-            ViewBag.CidadeID = new SelectList(db.Cidade, "CidadeID", "Nome");
+            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == db.Estado.FirstOrDefault().EstadoID), "CidadeID", "Nome");
             ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF");
             return View();
         }
@@ -88,8 +95,9 @@ namespace ConsultorioMedico.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "PessoaID,Nome,Endereco,Nascimento,CPF,CEP,Numero,CidadeID,EstadoID,FuncionarioID,Cargo")] Atendente atendente)
+        public async Task<ActionResult> Create([Bind(Include = "PessoaID,Nome,Login,Senha,Endereco,Nascimento,CPF,CEP,Numero,CidadeID,EstadoID,FuncionarioID,Cargo")] Atendente atendente)
         {
+            atendente.CargoID = db.Cargo.Where(s => s.Nome.Contains("Atendente")).First().CargoID;
             if (ModelState.IsValid)
             {
                 db.Pessoa.Add(atendente);
@@ -97,7 +105,7 @@ namespace ConsultorioMedico.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CidadeID = new SelectList(db.Cidade, "CidadeID", "Nome", atendente.CidadeID);
+            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == atendente.EstadoID), "CidadeID", "Nome", atendente.CidadeID);
             ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", atendente.EstadoID);
             return View(atendente);
         }
@@ -109,12 +117,12 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Atendente atendente = await db.Atendente.FindAsync(id);
+            Atendente atendente = await db.Atendente.Where(p => p.FuncionarioID == id).FirstAsync();
             if (atendente == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CidadeID = new SelectList(db.Cidade, "CidadeID", "Nome", atendente.CidadeID);
+            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == atendente.EstadoID), "CidadeID", "Nome", atendente.CidadeID);
             ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", atendente.EstadoID);
             return View(atendente);
         }
@@ -132,7 +140,7 @@ namespace ConsultorioMedico.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.CidadeID = new SelectList(db.Cidade, "CidadeID", "Nome", atendente.CidadeID);
+            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == atendente.EstadoID), "CidadeID", "Nome", atendente.CidadeID);
             ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", atendente.EstadoID);
             return View(atendente);
         }
@@ -144,7 +152,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Atendente atendente = await db.Atendente.FindAsync(id);
+            Atendente atendente = await db.Atendente.Where(p => p.FuncionarioID == id).FirstAsync();
             if (atendente == null)
             {
                 return HttpNotFound();
@@ -157,7 +165,7 @@ namespace ConsultorioMedico.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Atendente atendente = await db.Atendente.FindAsync(id);
+            Atendente atendente = await db.Atendente.Where(p => p.FuncionarioID == id).FirstAsync(); ;
             db.Pessoa.Remove(atendente);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

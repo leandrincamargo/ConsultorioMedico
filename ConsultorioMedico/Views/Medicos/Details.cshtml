@@ -23,6 +23,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.Login)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Login)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.CPF)
         </dt>
 
@@ -87,11 +95,19 @@
         </dd>
 
         <dt>
-            Horário de Atendimento
+            @Html.DisplayNameFor(model => model.horarioEntrada)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.horarioAtendimento)
+            @Html.DisplayFor(model => model.horarioEntrada)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.horarioSaida)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.horarioSaida)
         </dd>
 
         <dt>
