@@ -113,6 +113,7 @@ namespace ConsultorioMedico.Controllers
         // GET: Consultas/Create
         public ActionResult Create()
         {
+            //ViewBag
             ViewBag.MedicoID = new SelectList(db.Medico.Where(m => m.EspecialidadeID == db.Especialidade.FirstOrDefault().EspecialidadeID), "FuncionarioID", "Nome");
             ViewBag.PacienteID = new SelectList(db.Paciente, "PacienteID", "Nome");
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome");
