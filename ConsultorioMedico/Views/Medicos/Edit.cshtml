@@ -1,0 +1,138 @@
+﻿@model ConsultorioMedico.Models.Medico
+
+<h2>Editar</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Médico</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.PessoaID)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control", @require = true } })
+            @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CPF, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.CPF, new { htmlAttributes = new { @class = "form-control", @require = true } })
+            @Html.ValidationMessageFor(model => model.CPF, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Nascimento, "Data de Nascimento", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Nascimento, new { htmlAttributes = new { @class = "form-control", @require = true } })
+            @Html.ValidationMessageFor(model => model.Nascimento, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Endereco, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Endereco, new { htmlAttributes = new { @class = "form-control", @require = true } })
+            @Html.ValidationMessageFor(model => model.Endereco, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Numero, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Numero, new { htmlAttributes = new { @class = "form-control", @require = true } })
+            @Html.ValidationMessageFor(model => model.Numero, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CEP, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.CEP, new { htmlAttributes = new { @class = "form-control", @require = true } })
+            @Html.ValidationMessageFor(model => model.CEP, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.EstadoID, "Estado", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("EstadoID", null, htmlAttributes: new { @class = "form-control", @require = true })
+            @Html.ValidationMessageFor(model => model.EstadoID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CidadeID, "Cidade", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("CidadeID", null, htmlAttributes: new { @class = "form-control", @require = true })
+            @Html.ValidationMessageFor(model => model.CidadeID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CRM, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.CRM, new { htmlAttributes = new { @class = "form-control", @require = true } })
+            @Html.ValidationMessageFor(model => model.CRM, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.EspecialidadeID, "Especialidade", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("EspecialidadeID", null, htmlAttributes: new { @class = "form-control", @require = true })
+            @Html.ValidationMessageFor(model => model.EspecialidadeID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.horarioAtendimento, "Horário de Atendimento", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.horarioAtendimento, new { htmlAttributes = new { @class = "form-control", @require = true } })
+            @Html.ValidationMessageFor(model => model.horarioAtendimento, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Salvar" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Voltar para Lista", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript" src="~/Scripts/jquery.mask.js"></script>
+    <script>
+        $("#Nascimento").mask('00/00/0000', { placeholder: "__/__/____" });
+        $('#CPF').mask('000.000.000-00', { placeholder: "___.___.___-__" });
+        $('#CEP').mask('00000-000', { placeholder: "_____-___" });
+        $("#EstadoID").change(function () {
+            var id = $(this).find(":selected").val();
+            $.ajax({
+                url: "/Pacientes/ObterCidades/" + id,
+                success: function (data) {
+                    $("#CidadeID").empty();
+                    $("#CidadeID").append('<option value>Selecione...</option>');
+                    $.each(data, function (index, element) {
+                        $("#CidadeID").append('<option value="' + element.Value + '">' + element.Text + '</option>');
+                    });
+                }
+            });
+        });
+    </script>
+
+}

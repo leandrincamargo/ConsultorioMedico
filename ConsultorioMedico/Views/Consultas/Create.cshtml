@@ -1,0 +1,107 @@
+﻿@model ConsultorioMedico.Models.Consulta
+
+<h2>Criar</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Consulta</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.PacienteID, "Paciente", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("PacienteID", null, htmlAttributes: new { @class = "form-control", @required = true })
+                @Html.ValidationMessageFor(model => model.PacienteID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EspecialidadeID, "Especialidade", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("EspecialidadeID", null, htmlAttributes: new { @class = "form-control", @required = true })
+                @Html.ValidationMessageFor(model => model.EspecialidadeID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ConvenioID, "Convenio", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ConvenioID", null, htmlAttributes: new { @class = "form-control", @required = true })
+                @Html.ValidationMessageFor(model => model.ConvenioID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MedicoID, "Medico", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("MedicoID", null, htmlAttributes: new { @class = "form-control", @required = true })
+                @Html.ValidationMessageFor(model => model.MedicoID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.dataConsulta, "Data da Consulta", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.dataConsulta, new { htmlAttributes = new { @class = "form-control", @required = true } })
+                @Html.ValidationMessageFor(model => model.dataConsulta, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AtendenteID, "Atendente", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("AtendenteID", null, htmlAttributes: new { @class = "form-control", @required = true })
+                @Html.ValidationMessageFor(model => model.AtendenteID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Criar" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Voltar para Lista", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript" src="~/Scripts/jquery.mask.js"></script>
+    <script>
+        $("#MedicoID").empty();
+        $("#MedicoID").append('<option value>Selecione...</option>');
+
+        $("#EspecialidadeID").ready(function () {
+            $.ajax({
+                url: "/Consultas/ObterMedico/" + 1,
+                success: function (data) {
+                    $("#MedicoID").empty();
+                    $("#MedicoID").append('<option value>Selecione...</option>');
+                    $.each(data, function (index, element) {
+                        $("#MedicoID").append('<option value="' + element.Value + '">' + element.Text + '</option>');
+                    });
+                }
+            });
+        });
+        $("#EspecialidadeID").change(function () {
+            var id = $(this).find(":selected").val();
+            $.ajax({
+                url: "/Consultas/ObterMedico/" + id,
+                success: function (data) {
+                    $("#MedicoID").empty();
+                    $("#MedicoID").append('<option value>Selecione...</option>');
+                    $.each(data, function (index, element) {
+                        $("#MedicoID").append('<option value="' + element.Value + '">' + element.Text + '</option>');
+                    });
+                }
+            });
+        });
+    </script>
+}

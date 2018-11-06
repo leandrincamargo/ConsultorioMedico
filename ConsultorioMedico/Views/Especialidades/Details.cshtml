@@ -1,0 +1,31 @@
+﻿@model ConsultorioMedico.Models.Especialidade
+
+<h2>Detalhes</h2>
+
+<div>
+    <h4>Especialidade</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            ID
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EspecialidadeID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.EspecialidadeID }) |
+    @Html.ActionLink("Deletar", "Delete", new { id = Model.EspecialidadeID }) |
+    @Html.ActionLink("Voltar para Lista", "Index")
+</p>

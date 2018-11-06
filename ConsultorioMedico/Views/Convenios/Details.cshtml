@@ -1,0 +1,31 @@
+﻿@model ConsultorioMedico.Models.Convenio
+
+<h2>Detalhes</h2>
+
+<div>
+    <h4>Convenio</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            ID
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ConvenioID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.ConvenioID }) |
+    @Html.ActionLink("Deletar", "Delete", new { id = Model.ConvenioID }) |
+    @Html.ActionLink("Voltar para Lista", "Index")
+</p>
