@@ -23,14 +23,11 @@ namespace ConsultorioMedico.Models
         public virtual DbSet<Pessoa> Pessoa { get; set; }
         public virtual DbSet<Cargo> Cargo { get; set; }
         public virtual DbSet<Paciente> Paciente { get; set; }
-        public virtual DbSet<Funcionario> Funcionario { get; set; }
         public virtual DbSet<Atendente> Atendente { get; set; }
         public virtual DbSet<Medico> Medico { get; set; }
         public virtual DbSet<Consulta> Consulta { get; set; }
         public virtual DbSet<Convenio> Convenio { get; set; }
         public virtual DbSet<Especialidade> Especialidade { get; set; }
-        public virtual DbSet<Cidade> Cidade { get; set; }
-        public virtual DbSet<Estado> Estado { get; set; }
         public virtual DbSet<Prontuario> Prontuario { get; set; }
         public virtual DbSet<Exame> Exame { get; set; }
     }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ConsultorioMedico.Models
 {
     [Table("Medico")]
-    public class Medico : Funcionario
+    public class Medico : Pessoa
     {
         public Medico()
         {

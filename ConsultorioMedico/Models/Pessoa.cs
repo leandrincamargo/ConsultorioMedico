@@ -9,10 +9,7 @@ namespace ConsultorioMedico.Models
     public class Pessoa
     {
         [Key]
-        [Column(Order = 1)]
         public int PessoaID { get; set; }
-        [Key]
-        [Column(Order = 2)]
         public string Login { get; set; }
         [Required]
         public string Nome { get; set; }
@@ -28,21 +25,17 @@ namespace ConsultorioMedico.Models
         public string CEP { get; set; }
         [Required]
         public short Numero { get; set; }
-        [Display(Name = "Cidade")]
         [Required]
-        public int CidadeID { get; set; }
-        [Display(Name = "Estado")]
+        public string Cidade { get; set; }
         [Required]
-        public int EstadoID { get; set; }
+        public string Estado { get; set; }
         [Required]
         [DataType(DataType.Password)]
         public string Senha { get; set; }
         [Required]
         [Display(Name = "Cargo")]
         public int CargoID { get; set; }
-
-        public virtual Cidade Cidade { get; set; }
+        
         public virtual Cargo Cargo { get; set; }
-        public virtual Estado Estado { get; set; }
     }
 }

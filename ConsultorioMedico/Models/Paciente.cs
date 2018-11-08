@@ -13,9 +13,7 @@ namespace ConsultorioMedico.Models
             this.Consulta = new HashSet<Consulta>();
             this.Prontuario = new HashSet<Prontuario>();
         }
-
-        [Key]
-        public int PacienteID { get; set; }
+        
         [Required]
         [Display(Name = "Convenio")]
         public int ConvenioID { get; set; }

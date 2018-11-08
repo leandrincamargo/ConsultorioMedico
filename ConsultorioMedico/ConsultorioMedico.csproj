@@ -124,6 +124,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Business\ConsultaBusiness.cs" />
     <Compile Include="Controllers\AtendentesController.cs" />
     <Compile Include="Controllers\ConsultasController.cs" />
     <Compile Include="Controllers\ConveniosController.cs" />
@@ -134,17 +135,18 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811080416198_initial.cs" />
+    <Compile Include="Migrations\201811080416198_initial.Designer.cs">
+      <DependentUpon>201811080416198_initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Atendente.cs" />
     <Compile Include="Models\Cargo.cs" />
-    <Compile Include="Models\Cidade.cs" />
     <Compile Include="Models\Consulta.cs" />
     <Compile Include="Models\ConsultorioEntities.cs" />
     <Compile Include="Models\Convenio.cs" />
     <Compile Include="Models\Especialidade.cs" />
-    <Compile Include="Models\Estado.cs" />
     <Compile Include="Models\Exame.cs" />
-    <Compile Include="Models\Funcionario.cs" />
     <Compile Include="Models\Medico.cs" />
     <Compile Include="Models\Paciente.cs" />
     <Compile Include="Models\Pessoa.cs" />
@@ -152,10 +154,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Consultorio.mdf" />
-    <Content Include="App_Data\Consultorio_log.ldf">
-      <DependentUpon>Consultorio.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\PagedList.css" />
@@ -167,9 +165,8 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Cargos.sql" />
-    <Content Include="Scripts\Cidades.sql" />
-    <Content Include="Scripts\Estados.sql" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\ExcluirDB.sql" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -187,6 +184,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\validaCep.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -244,6 +242,14 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201811080416198_initial.resx">
+      <DependentUpon>201811080416198_initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using ConsultorioMedico.Models;
 using PagedList;
+using ConsultorioMedico.Business;
 
 namespace ConsultorioMedico.Controllers
 {
@@ -113,12 +114,18 @@ namespace ConsultorioMedico.Controllers
         // GET: Consultas/Create
         public ActionResult Create()
         {
-            //ViewBag
-            ViewBag.MedicoID = new SelectList(db.Medico.Where(m => m.EspecialidadeID == db.Especialidade.FirstOrDefault().EspecialidadeID), "FuncionarioID", "Nome");
-            ViewBag.PacienteID = new SelectList(db.Paciente, "PacienteID", "Nome");
+
+            var consulta = new ConsultaBusiness(DateTime.Today, 2);
+            ViewBag.horarioConsulta = new SelectList(consulta.Horarios);
+            //ViewBag.horarioConsulta = new SelectList(new List<SelectListItem>
+            //{
+            //    new SelectListItem{ Selected = true, Text = "Selecione o Médico e a Data", Value = "-1"}
+            //}, "Value", "Text");
+            ViewBag.MedicoID = new SelectList(db.Medico.Where(m => m.EspecialidadeID == db.Especialidade.FirstOrDefault().EspecialidadeID), "PessoaID", "Nome");
+            ViewBag.PacienteID = new SelectList(db.Paciente, "PessoaID", "Nome");
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome");
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome");
-            ViewBag.AtendenteID = new SelectList(db.Atendente, "FuncionarioID", "Nome");
+            ViewBag.AtendenteID = new SelectList(db.Atendente, "PessoaID", "Nome");
             return View();
         }
 
@@ -127,7 +134,7 @@ namespace ConsultorioMedico.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ConsultaID,dataConsulta,MedicoID,PacienteID,EspecialidadeID,ConvenioID,AtendenteID,ProntuarioID")] Consulta consulta)
+        public async Task<ActionResult> Create([Bind(Include = "ConsultaID,dataConsulta,horarioConsulta,MedicoID,PacienteID,EspecialidadeID,ConvenioID,AtendenteID")] Consulta consulta)
         {
             if (ModelState.IsValid)
             {
@@ -136,11 +143,11 @@ namespace ConsultorioMedico.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.MedicoID = new SelectList(db.Medico, "FuncionarioID", "Nome", consulta.MedicoID);
-            ViewBag.PacienteID = new SelectList(db.Paciente, "PacienteID", "Nome", consulta.PacienteID);
+            ViewBag.MedicoID = new SelectList(db.Medico, "PessoaID", "Nome", consulta.MedicoID);
+            ViewBag.PacienteID = new SelectList(db.Paciente, "PessoaID", "Nome", consulta.PacienteID);
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome", consulta.EspecialidadeID);
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome", consulta.ConvenioID);
-            ViewBag.AtendenteID = new SelectList(db.Atendente, "FuncionarioID", "Nome", consulta.AtendenteID);
+            ViewBag.AtendenteID = new SelectList(db.Atendente, "PessoaID", "Nome", consulta.AtendenteID);
             return View(consulta);
         }
 
@@ -156,11 +163,11 @@ namespace ConsultorioMedico.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.MedicoID = new SelectList(db.Medico, "FuncionarioID", "Nome", consulta.MedicoID);
-            ViewBag.PacienteID = new SelectList(db.Paciente, "PacienteID", "Nome", consulta.PacienteID);
+            ViewBag.MedicoID = new SelectList(db.Medico, "PessoaID", "Nome", consulta.MedicoID);
+            ViewBag.PacienteID = new SelectList(db.Paciente, "PessoaID", "Nome", consulta.PacienteID);
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome", consulta.EspecialidadeID);
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome", consulta.ConvenioID);
-            ViewBag.AtendenteID = new SelectList(db.Atendente, "FuncionarioID", "Nome", consulta.AtendenteID);
+            ViewBag.AtendenteID = new SelectList(db.Atendente, "PessoaID", "Nome", consulta.AtendenteID);
             return View(consulta);
         }
 
@@ -169,7 +176,7 @@ namespace ConsultorioMedico.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ConsultaID,dataConsulta,MedicoID,PacienteID,EspecialidadeID,ConvenioID,AtendenteID,ProntuarioID")] Consulta consulta)
+        public async Task<ActionResult> Edit([Bind(Include = "ConsultaID,dataConsulta,horaConsulta,MedicoID,PacienteID,EspecialidadeID,ConvenioID,AtendenteID,ProntuarioID")] Consulta consulta)
         {
             if (ModelState.IsValid)
             {
@@ -177,11 +184,11 @@ namespace ConsultorioMedico.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.MedicoID = new SelectList(db.Medico, "FuncionarioID", "Nome", consulta.MedicoID);
-            ViewBag.PacienteID = new SelectList(db.Paciente, "PacienteID", "Nome", consulta.PacienteID);
+            ViewBag.MedicoID = new SelectList(db.Medico, "PessoaID", "Nome", consulta.MedicoID);
+            ViewBag.PacienteID = new SelectList(db.Paciente, "PessoaID", "Nome", consulta.PacienteID);
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome", consulta.EspecialidadeID);
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome", consulta.ConvenioID);
-            ViewBag.AtendenteID = new SelectList(db.Atendente, "FuncionarioID", "Nome", consulta.AtendenteID);
+            ViewBag.AtendenteID = new SelectList(db.Atendente, "PessoaID", "Nome", consulta.AtendenteID);
             return View(consulta);
         }
 
@@ -223,7 +230,15 @@ namespace ConsultorioMedico.Controllers
         public JsonResult ObterMedico(int id)
         {
             //Retorna o valor em JSON
-            return Json(db.Medico.Where(e => e.EspecialidadeID == id).Select(e => new { Text = e.Nome, Value = e.FuncionarioID }), JsonRequestBehavior.AllowGet);
+            return Json(db.Medico.Where(e => e.EspecialidadeID == id).Select(e => new { Text = e.Nome, Value = e.PessoaID }), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ObterHorario(DateTime dia, int medico)
+        {
+            //Retorna o valor em JSON
+            var consulta = new ConsultaBusiness(dia, medico);
+            return Json(consulta, JsonRequestBehavior.AllowGet);
+            //return Json(db.Medico.Where(e => e.EspecialidadeID == id).Select(e => new { Text = e.Nome, Value = e.PessoaID }), JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ConsultorioMedico.Models
 {
     [Table("Atendente")]
-    public class Atendente : Funcionario
+    public class Atendente : Pessoa
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Atendente()

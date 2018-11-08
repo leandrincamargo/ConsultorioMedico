@@ -38,7 +38,7 @@ namespace ConsultorioMedico.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var medicos = from s in db.Medico.Include(p => p.Cidade).Include(p => p.Estado).Include(p => p.Especialidade)
+            var medicos = from s in db.Medico.Include(p => p.Especialidade)
                            select s;
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -50,10 +50,10 @@ namespace ConsultorioMedico.Controllers
                     medicos = medicos.OrderByDescending(s => s.Nome);
                     break;
                 case "id_desc":
-                    medicos = medicos.OrderByDescending(s => s.FuncionarioID);
+                    medicos = medicos.OrderByDescending(s => s.PessoaID);
                     break;
                 case "MedicoID":
-                    medicos = medicos.OrderBy(s => s.FuncionarioID);
+                    medicos = medicos.OrderBy(s => s.PessoaID);
                     break;
                 case "login_desc":
                     medicos = medicos.OrderByDescending(s => s.Login);
@@ -82,7 +82,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Medico medico = await db.Medico.Where(p => p.FuncionarioID == id).FirstAsync();
+            Medico medico = await db.Medico.Where(p => p.PessoaID == id).FirstAsync();
             if (medico == null)
             {
                 return HttpNotFound();
@@ -93,8 +93,6 @@ namespace ConsultorioMedico.Controllers
         // GET: Medicos/Create
         public ActionResult Create()
         {
-            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == db.Estado.FirstOrDefault().EstadoID), "CidadeID", "Nome");
-            ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF");
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome");
             return View();
         }
@@ -104,7 +102,7 @@ namespace ConsultorioMedico.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "PessoaID,Nome,Login,Senha,Endereco,Nascimento,CPF,CEP,Numero,CidadeID,EstadoID,FuncionarioID,Cargo,CRM,EspecialidadeID,horarioEntrada,horarioSaida")] Medico medico)
+        public async Task<ActionResult> Create([Bind(Include = "PessoaID,Nome,Login,Senha,Endereco,Nascimento,CPF,CEP,Numero,Cidade,Estado,Cargo,CRM,EspecialidadeID,horarioEntrada,horarioSaida")] Medico medico)
         {
             medico.CargoID = db.Cargo.Where(s => s.Nome.Contains("Medico")).First().CargoID;
             if (ModelState.IsValid)
@@ -113,9 +111,7 @@ namespace ConsultorioMedico.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == medico.EstadoID), "CidadeID", "Nome", medico.CidadeID);
-            ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", medico.EstadoID);
+            
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome", medico.EspecialidadeID);
             return View(medico);
         }
@@ -127,13 +123,11 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Medico medico = await db.Medico.Where(p => p.FuncionarioID == id).FirstAsync();
+            Medico medico = await db.Medico.Where(p => p.PessoaID == id).FirstAsync();
             if (medico == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == medico.EstadoID), "CidadeID", "Nome", medico.CidadeID);
-            ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", medico.EstadoID);
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome", medico.EspecialidadeID);
             return View(medico);
         }
@@ -143,7 +137,7 @@ namespace ConsultorioMedico.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "PessoaID,Nome,Endereco,Nascimento,CPF,CEP,Numero,CidadeID,EstadoID,FuncionarioID,Cargo,CRM,EspecialidadeID,horarioAtendimento")] Medico medico)
+        public async Task<ActionResult> Edit([Bind(Include = "PessoaID,Nome,Endereco,Nascimento,CPF,CEP,Numero,Cidade,Estado,Cargo,CRM,EspecialidadeID,horarioAtendimento")] Medico medico)
         {
             if (ModelState.IsValid)
             {
@@ -151,8 +145,6 @@ namespace ConsultorioMedico.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == medico.EstadoID), "CidadeID", "Nome", medico.CidadeID);
-            ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", medico.EstadoID);
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome", medico.EspecialidadeID);
             return View(medico);
         }
@@ -164,7 +156,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Medico medico = await db.Medico.Where(p => p.FuncionarioID == id).FirstAsync();
+            Medico medico = await db.Medico.Where(p => p.PessoaID == id).FirstAsync();
             if (medico == null)
             {
                 return HttpNotFound();
@@ -177,7 +169,7 @@ namespace ConsultorioMedico.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Medico medico = await db.Medico.Where(p => p.FuncionarioID == id).FirstAsync();
+            Medico medico = await db.Medico.Where(p => p.PessoaID == id).FirstAsync();
             db.Pessoa.Remove(medico);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -190,12 +182,6 @@ namespace ConsultorioMedico.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        public JsonResult ObterCidades(int id)
-        {
-            //Retorna o valor em JSON
-            return Json(db.Cidade.Where(e => e.EstadoID == id).Select(e => new { Text = e.Nome, Value = e.CidadeID }), JsonRequestBehavior.AllowGet);
         }
     }
 }

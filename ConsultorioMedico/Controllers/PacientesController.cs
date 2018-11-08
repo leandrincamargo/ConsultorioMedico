@@ -35,7 +35,7 @@ namespace ConsultorioMedico.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var pacientes = from s in db.Paciente.Include(p => p.Cidade).Include(p => p.Estado).Include(p => p.Convenio)
+            var pacientes = from s in db.Paciente.Include(p => p.Convenio)
                             select s;
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -85,8 +85,6 @@ namespace ConsultorioMedico.Controllers
         // GET: Pacientes/Create
         public ActionResult Create()
         {
-            ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF");
-            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == db.Estado.FirstOrDefault().EstadoID), "CidadeID", "Nome");
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome");
             return View();
         }
@@ -96,7 +94,7 @@ namespace ConsultorioMedico.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "PessoaID,Login,Senha,Nome,Endereco,Nascimento,CPF,CEP,Numero,CidadeID,EstadoID,PacienteID,ConvenioID")] Paciente paciente)
+        public async Task<ActionResult> Create([Bind(Include = "PessoaID,Login,Senha,Nome,Endereco,Nascimento,CPF,CEP,Numero,Cidade,Estado,PacienteID,ConvenioID")] Paciente paciente)
         {
             paciente.CargoID = db.Cargo.Where(s => s.Nome.Contains("Paciente")).First().CargoID;
             if (ModelState.IsValid)
@@ -105,9 +103,7 @@ namespace ConsultorioMedico.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == paciente.EstadoID), "CidadeID", "Nome", paciente.CidadeID);
-            ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", paciente.EstadoID);
+            
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome", paciente.ConvenioID);
             return View(paciente);
         }
@@ -124,8 +120,6 @@ namespace ConsultorioMedico.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == paciente.EstadoID), "CidadeID", "Nome", paciente.CidadeID);
-            ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", paciente.EstadoID);
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome", paciente.ConvenioID);
             return View(paciente);
         }
@@ -135,7 +129,7 @@ namespace ConsultorioMedico.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "PessoaID,Nome,Endereco,Nascimento,CPF,CEP,Numero,CidadeID,EstadoID,PacienteID,ConvenioID")] Paciente paciente)
+        public async Task<ActionResult> Edit([Bind(Include = "PessoaID,Nome,Endereco,Nascimento,CPF,CEP,Numero,Cidade,Estado,PacienteID,ConvenioID")] Paciente paciente)
         {
             if (ModelState.IsValid)
             {
@@ -143,8 +137,6 @@ namespace ConsultorioMedico.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == paciente.EstadoID), "CidadeID", "Nome", paciente.CidadeID);
-            ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", paciente.EstadoID);
             ViewBag.ConvenioID = new SelectList(db.Convenio, "ConvenioID", "Nome", paciente.ConvenioID);
             return View(paciente);
         }
@@ -182,11 +174,6 @@ namespace ConsultorioMedico.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-        public JsonResult ObterCidades(int id)
-        {
-            //Retorna o valor em JSON
-            return Json(db.Cidade.Where(e => e.EstadoID == id).Select(e => new { Text = e.Nome, Value = e.CidadeID }), JsonRequestBehavior.AllowGet);
         }
     }
 }

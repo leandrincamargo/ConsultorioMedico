@@ -35,7 +35,7 @@ namespace ConsultorioMedico.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var atendentes = from s in db.Atendente.Include(p => p.Cidade).Include(p => p.Estado)
+            var atendentes = from s in db.Atendente
                           select s;
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -47,10 +47,10 @@ namespace ConsultorioMedico.Controllers
                     atendentes = atendentes.OrderByDescending(s => s.Nome);
                     break;
                 case "id_desc":
-                    atendentes = atendentes.OrderByDescending(s => s.FuncionarioID);
+                    atendentes = atendentes.OrderByDescending(s => s.PessoaID);
                     break;
                 case "AtendenteID":
-                    atendentes = atendentes.OrderBy(s => s.FuncionarioID);
+                    atendentes = atendentes.OrderBy(s => s.PessoaID);
                     break;
                 case "login_desc":
                     atendentes = atendentes.OrderByDescending(s => s.Login);
@@ -74,7 +74,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Atendente atendente = await db.Atendente.Where(p => p.FuncionarioID == id).FirstAsync();
+            Atendente atendente = await db.Atendente.Where(p => p.PessoaID == id).FirstAsync();
             if (atendente == null)
             {
                 return HttpNotFound();
@@ -85,8 +85,6 @@ namespace ConsultorioMedico.Controllers
         // GET: Atendentes/Create
         public ActionResult Create()
         {
-            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == db.Estado.FirstOrDefault().EstadoID), "CidadeID", "Nome");
-            ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF");
             return View();
         }
 
@@ -95,7 +93,7 @@ namespace ConsultorioMedico.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "PessoaID,Nome,Login,Senha,Endereco,Nascimento,CPF,CEP,Numero,CidadeID,EstadoID,FuncionarioID,Cargo")] Atendente atendente)
+        public async Task<ActionResult> Create([Bind(Include = "PessoaID,Nome,Login,Senha,Endereco,Nascimento,CPF,CEP,Numero,Cidade,Estado,Cargo")] Atendente atendente)
         {
             atendente.CargoID = db.Cargo.Where(s => s.Nome.Contains("Atendente")).First().CargoID;
             if (ModelState.IsValid)
@@ -104,9 +102,7 @@ namespace ConsultorioMedico.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == atendente.EstadoID), "CidadeID", "Nome", atendente.CidadeID);
-            ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", atendente.EstadoID);
+            
             return View(atendente);
         }
 
@@ -117,13 +113,11 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Atendente atendente = await db.Atendente.Where(p => p.FuncionarioID == id).FirstAsync();
+            Atendente atendente = await db.Atendente.Where(p => p.PessoaID == id).FirstAsync();
             if (atendente == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == atendente.EstadoID), "CidadeID", "Nome", atendente.CidadeID);
-            ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", atendente.EstadoID);
             return View(atendente);
         }
 
@@ -132,7 +126,7 @@ namespace ConsultorioMedico.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "PessoaID,Nome,Endereco,Nascimento,CPF,CEP,Numero,CidadeID,EstadoID,FuncionarioID,Cargo")] Atendente atendente)
+        public async Task<ActionResult> Edit([Bind(Include = "PessoaID,Nome,Endereco,Nascimento,CPF,CEP,Numero,Cidade,Estado,Cargo")] Atendente atendente)
         {
             if (ModelState.IsValid)
             {
@@ -140,8 +134,6 @@ namespace ConsultorioMedico.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.CidadeID = new SelectList(db.Cidade.Where(c => c.EstadoID == atendente.EstadoID), "CidadeID", "Nome", atendente.CidadeID);
-            ViewBag.EstadoID = new SelectList(db.Estado, "EstadoID", "UF", atendente.EstadoID);
             return View(atendente);
         }
 
@@ -152,7 +144,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Atendente atendente = await db.Atendente.Where(p => p.FuncionarioID == id).FirstAsync();
+            Atendente atendente = await db.Atendente.Where(p => p.PessoaID == id).FirstAsync();
             if (atendente == null)
             {
                 return HttpNotFound();
@@ -165,7 +157,7 @@ namespace ConsultorioMedico.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Atendente atendente = await db.Atendente.Where(p => p.FuncionarioID == id).FirstAsync(); ;
+            Atendente atendente = await db.Atendente.Where(p => p.PessoaID == id).FirstAsync(); ;
             db.Pessoa.Remove(atendente);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -178,12 +170,6 @@ namespace ConsultorioMedico.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-        
-        public JsonResult ObterCidades(int id)
-        {
-            //Retorna o valor em JSON
-            return Json(db.Cidade.Where(e => e.EstadoID == id).Select(e => new { Text = e.Nome, Value = e.CidadeID }), JsonRequestBehavior.AllowGet);
         }
     }
 }
