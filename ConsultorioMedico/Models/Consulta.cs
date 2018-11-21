@@ -29,7 +29,7 @@ namespace ConsultorioMedico.Models
         [Required]
         [Display(Name = "Data de Consulta")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public System.DateTime dataConsulta { get; set; }
+        public DateTime dataConsulta { get; set; }
         [Required]
         [Display(Name = "Horario da Consulta")]
         [DataType(DataType.Time)]

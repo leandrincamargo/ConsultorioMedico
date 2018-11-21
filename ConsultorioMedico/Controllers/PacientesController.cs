@@ -47,10 +47,10 @@ namespace ConsultorioMedico.Controllers
                     pacientes = pacientes.OrderByDescending(s => s.Nome);
                     break;
                 case "id_desc":
-                    pacientes = pacientes.OrderByDescending(s => s.PacienteID);
+                    pacientes = pacientes.OrderByDescending(s => s.PessoaID);
                     break;
                 case "PacienteID":
-                    pacientes = pacientes.OrderBy(s => s.PacienteID);
+                    pacientes = pacientes.OrderBy(s => s.PessoaID);
                     break;
                 case "login_desc":
                     pacientes = pacientes.OrderByDescending(s => s.Login);
@@ -74,7 +74,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Paciente paciente = await db.Paciente.Where(p => p.PacienteID == id).FirstAsync();
+            Paciente paciente = await db.Paciente.Where(p => p.PessoaID == id).FirstAsync();
             if (paciente == null)
             {
                 return HttpNotFound();
@@ -115,7 +115,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Paciente paciente = await db.Paciente.Where(p => p.PacienteID == id).FirstAsync();
+            Paciente paciente = await db.Paciente.Where(p => p.PessoaID == id).FirstAsync();
             if (paciente == null)
             {
                 return HttpNotFound();
@@ -148,7 +148,7 @@ namespace ConsultorioMedico.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Paciente paciente = await db.Paciente.Where(p => p.PacienteID == id).FirstAsync();
+            Paciente paciente = await db.Paciente.Where(p => p.PessoaID == id).FirstAsync();
             if (paciente == null)
             {
                 return HttpNotFound();
@@ -161,7 +161,7 @@ namespace ConsultorioMedico.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Paciente paciente = await db.Paciente.Where(p => p.PacienteID == id).FirstAsync();
+            Paciente paciente = await db.Paciente.Where(p => p.PessoaID == id).FirstAsync();
             db.Pessoa.Remove(paciente);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");

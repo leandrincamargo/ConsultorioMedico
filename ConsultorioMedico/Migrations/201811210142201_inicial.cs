@@ -3,7 +3,7 @@ namespace ConsultorioMedico.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class initial : DbMigration
+    public partial class inicial : DbMigration
     {
         public override void Up()
         {
@@ -49,21 +49,18 @@ namespace ConsultorioMedico.Migrations
                         horarioConsulta = c.DateTime(nullable: false),
                         ConvenioID = c.Int(nullable: false),
                         AtendenteID = c.Int(nullable: false),
-                        Atendente_PessoaID = c.Int(),
-                        Paciente_PessoaID = c.Int(),
-                        Medico_PessoaID = c.Int(),
                     })
                 .PrimaryKey(t => t.ConsultaID)
-                .ForeignKey("dbo.Atendente", t => t.Atendente_PessoaID)
+                .ForeignKey("dbo.Atendente", t => t.AtendenteID)
                 .ForeignKey("dbo.Convenio", t => t.ConvenioID)
-                .ForeignKey("dbo.Paciente", t => t.Paciente_PessoaID)
                 .ForeignKey("dbo.Especialidade", t => t.EspecialidadeID)
-                .ForeignKey("dbo.Medico", t => t.Medico_PessoaID)
+                .ForeignKey("dbo.Medico", t => t.MedicoID)
+                .ForeignKey("dbo.Paciente", t => t.PacienteID)
+                .Index(t => t.PacienteID)
                 .Index(t => t.EspecialidadeID)
+                .Index(t => t.MedicoID)
                 .Index(t => t.ConvenioID)
-                .Index(t => t.Atendente_PessoaID)
-                .Index(t => t.Paciente_PessoaID)
-                .Index(t => t.Medico_PessoaID);
+                .Index(t => t.AtendenteID);
             
             CreateTable(
                 "dbo.Convenio",
@@ -84,18 +81,16 @@ namespace ConsultorioMedico.Migrations
                         PacienteID = c.Int(nullable: false),
                         ExameID = c.Int(nullable: false),
                         ConsultaID = c.Int(nullable: false),
-                        Medico_PessoaID = c.Int(),
-                        Paciente_PessoaID = c.Int(),
                     })
                 .PrimaryKey(t => t.ProntuarioID)
                 .ForeignKey("dbo.Consulta", t => t.ConsultaID)
                 .ForeignKey("dbo.Exame", t => t.ExameID)
-                .ForeignKey("dbo.Medico", t => t.Medico_PessoaID)
-                .ForeignKey("dbo.Paciente", t => t.Paciente_PessoaID)
+                .ForeignKey("dbo.Medico", t => t.MedicoID)
+                .ForeignKey("dbo.Paciente", t => t.PacienteID)
+                .Index(t => t.MedicoID)
+                .Index(t => t.PacienteID)
                 .Index(t => t.ExameID)
-                .Index(t => t.ConsultaID)
-                .Index(t => t.Medico_PessoaID)
-                .Index(t => t.Paciente_PessoaID);
+                .Index(t => t.ConsultaID);
             
             CreateTable(
                 "dbo.Exame",
@@ -146,7 +141,6 @@ namespace ConsultorioMedico.Migrations
                 c => new
                     {
                         PessoaID = c.Int(nullable: false),
-                        PacienteID = c.Int(nullable: false),
                         ConvenioID = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.PessoaID)
@@ -164,30 +158,30 @@ namespace ConsultorioMedico.Migrations
             DropForeignKey("dbo.Medico", "EspecialidadeID", "dbo.Especialidade");
             DropForeignKey("dbo.Medico", "PessoaID", "dbo.Pessoa");
             DropForeignKey("dbo.Atendente", "PessoaID", "dbo.Pessoa");
-            DropForeignKey("dbo.Consulta", "Medico_PessoaID", "dbo.Medico");
+            DropForeignKey("dbo.Consulta", "PacienteID", "dbo.Paciente");
+            DropForeignKey("dbo.Consulta", "MedicoID", "dbo.Medico");
             DropForeignKey("dbo.Consulta", "EspecialidadeID", "dbo.Especialidade");
-            DropForeignKey("dbo.Prontuario", "Paciente_PessoaID", "dbo.Paciente");
-            DropForeignKey("dbo.Prontuario", "Medico_PessoaID", "dbo.Medico");
+            DropForeignKey("dbo.Consulta", "ConvenioID", "dbo.Convenio");
+            DropForeignKey("dbo.Prontuario", "PacienteID", "dbo.Paciente");
+            DropForeignKey("dbo.Prontuario", "MedicoID", "dbo.Medico");
             DropForeignKey("dbo.Prontuario", "ExameID", "dbo.Exame");
             DropForeignKey("dbo.Prontuario", "ConsultaID", "dbo.Consulta");
-            DropForeignKey("dbo.Consulta", "Paciente_PessoaID", "dbo.Paciente");
-            DropForeignKey("dbo.Consulta", "ConvenioID", "dbo.Convenio");
-            DropForeignKey("dbo.Consulta", "Atendente_PessoaID", "dbo.Atendente");
+            DropForeignKey("dbo.Consulta", "AtendenteID", "dbo.Atendente");
             DropForeignKey("dbo.Pessoa", "CargoID", "dbo.Cargo");
             DropIndex("dbo.Paciente", new[] { "ConvenioID" });
             DropIndex("dbo.Paciente", new[] { "PessoaID" });
             DropIndex("dbo.Medico", new[] { "EspecialidadeID" });
             DropIndex("dbo.Medico", new[] { "PessoaID" });
             DropIndex("dbo.Atendente", new[] { "PessoaID" });
-            DropIndex("dbo.Prontuario", new[] { "Paciente_PessoaID" });
-            DropIndex("dbo.Prontuario", new[] { "Medico_PessoaID" });
             DropIndex("dbo.Prontuario", new[] { "ConsultaID" });
             DropIndex("dbo.Prontuario", new[] { "ExameID" });
-            DropIndex("dbo.Consulta", new[] { "Medico_PessoaID" });
-            DropIndex("dbo.Consulta", new[] { "Paciente_PessoaID" });
-            DropIndex("dbo.Consulta", new[] { "Atendente_PessoaID" });
+            DropIndex("dbo.Prontuario", new[] { "PacienteID" });
+            DropIndex("dbo.Prontuario", new[] { "MedicoID" });
+            DropIndex("dbo.Consulta", new[] { "AtendenteID" });
             DropIndex("dbo.Consulta", new[] { "ConvenioID" });
+            DropIndex("dbo.Consulta", new[] { "MedicoID" });
             DropIndex("dbo.Consulta", new[] { "EspecialidadeID" });
+            DropIndex("dbo.Consulta", new[] { "PacienteID" });
             DropIndex("dbo.Pessoa", new[] { "CargoID" });
             DropTable("dbo.Paciente");
             DropTable("dbo.Medico");

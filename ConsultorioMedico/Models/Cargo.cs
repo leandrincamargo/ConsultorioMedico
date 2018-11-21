@@ -14,7 +14,8 @@ namespace ConsultorioMedico.Models
         public int CargoID { get; set; }
         [Required]
         public string Nome { get; set; }
-        public virtual ICollection<Pessoa> Pessoas { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Pessoa> Pessoas { get; set; }
     }
 }

@@ -18,6 +18,61 @@ namespace ConsultorioMedico.Models
         {
             //  throw new UnintentionalCodeFirstException();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+
+            modelBuilder.Entity<Consulta>()
+                .HasRequired<Medico>(s => s.Medico)
+                .WithMany(g => g.Consulta)
+                .HasForeignKey<int>(s => s.MedicoID);
+
+            modelBuilder.Entity<Consulta>()
+                .HasRequired<Atendente>(s => s.Atendente)
+                .WithMany(g => g.Consulta)
+                .HasForeignKey<int>(s => s.AtendenteID);
+
+            modelBuilder.Entity<Consulta>()
+                .HasRequired<Paciente>(s => s.Paciente)
+                .WithMany(g => g.Consulta)
+                .HasForeignKey<int>(s => s.PacienteID);
+
+            modelBuilder.Entity<Consulta>()
+                .HasRequired<Convenio>(s => s.Convenio)
+                .WithMany(g => g.Consulta)
+                .HasForeignKey<int>(s => s.ConvenioID);
+
+            modelBuilder.Entity<Pessoa>()
+                .HasRequired<Cargo>(s => s.Cargo)
+                .WithMany(g => g.Pessoas)
+                .HasForeignKey<int>(s => s.CargoID);
+
+            modelBuilder.Entity<Paciente>()
+                .HasRequired<Convenio>(s => s.Convenio)
+                .WithMany(g => g.Paciente)
+                .HasForeignKey<int>(s => s.ConvenioID);
+
+            modelBuilder.Entity<Medico>()
+                .HasRequired<Especialidade>(s => s.Especialidade)
+                .WithMany(g => g.Medico)
+                .HasForeignKey<int>(s => s.EspecialidadeID);
+
+            modelBuilder.Entity<Consulta>()
+                .HasRequired<Especialidade>(s => s.Especialidade)
+                .WithMany(g => g.Consulta)
+                .HasForeignKey<int>(s => s.EspecialidadeID);
+
+            modelBuilder.Entity<Prontuario>()
+                .HasRequired<Exame>(s => s.Exame)
+                .WithMany(g => g.Prontuario)
+                .HasForeignKey<int>(s => s.ExameID);
+
+            modelBuilder.Entity<Prontuario>()
+                .HasRequired<Medico>(s => s.Medico)
+                .WithMany(g => g.Prontuario)
+                .HasForeignKey<int>(s => s.MedicoID);
+
+            modelBuilder.Entity<Prontuario>()
+                .HasRequired<Paciente>(s => s.Paciente)
+                .WithMany(g => g.Prontuario)
+                .HasForeignKey<int>(s => s.PacienteID);
         }
 
         public virtual DbSet<Pessoa> Pessoa { get; set; }
