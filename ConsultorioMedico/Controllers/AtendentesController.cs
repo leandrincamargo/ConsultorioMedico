@@ -62,7 +62,7 @@ namespace ConsultorioMedico.Controllers
                     atendentes = atendentes.OrderBy(s => s.Nome);
                     break;
             }
-            int pageSize = 3;
+            int pageSize = 30;
             int pageNumber = (page ?? 1);
             return View(atendentes.ToPagedList(pageNumber, pageSize));
         }

@@ -45,7 +45,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.dataConsulta, "Data da Consulta", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.dataConsulta, new { htmlAttributes = new { @class = "form-control", type="date" } })
+                @Html.EditorFor(model => model.dataConsulta, new { htmlAttributes = new { @class = "form-control", type = "date", @blur="trocaHorario" } })
                 @Html.ValidationMessageFor(model => model.dataConsulta, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -82,15 +82,6 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript" src="~/Scripts/jquery.mask.js"></script>
     <script>
-        $.ajax({
-            url: "/Consultas/ObterHorario/" + id,
-            success: function (data) {
-                $("#MedicoID").empty();
-                $.each(data, function (index, element) {
-                    $("#MedicoID").append('<option value="' + element.Value + '">' + element.Text + '</option>');
-                });
-            }
-        });
         $("#EspecialidadeID").change(function () {
             var id = $(this).find(":selected").val();
             $.ajax({
@@ -102,6 +93,28 @@
                     });
                 }
             });
+        });
+
+        $("#dataConsulta").change(function () {
+            var medicoId = $("#MedicoID").find(":selected").val();
+            var dataConsulta = $(this).val();
+            $("#horarioConsulta").empty();
+            if (dataConsulta == "")
+                $("#horarioConsulta").append('<option value=-1>Selecione o Médico e a Data</option>');
+            else {
+                $.ajax({
+                    type: "GET",
+                    url: "/Consultas/ObterHorario/",
+                    data: { "medicoId": medicoId, "dataConsulta": dataConsulta },
+                    success: function (data) {
+                        console.log(data);
+                        $.each(data, function (index, element) {
+                            console.log(element);
+                            $("#horarioConsulta").append('<option value="' + element.Value + '">' + element.Text + '</option>');
+                        });
+                    }
+                });
+            }
         });
     </script>
 }

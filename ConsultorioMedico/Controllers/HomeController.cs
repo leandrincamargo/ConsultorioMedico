@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ConsultorioMedico.Models;
+using DayPilot.Web.Mvc;
+using DayPilot.Web.Mvc.Enums;
+using DayPilot.Web.Mvc.Events.Calendar;
+using System;
+using System.Data;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 
-namespace Teste.Controllers
+namespace ConsultorioMedico.Controllers
 {
     public class HomeController : Controller
     {
@@ -13,18 +17,35 @@ namespace Teste.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Backend()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            return new Dpc().CallBack(this);
         }
 
-        public ActionResult Contact()
+        class Dpc : DayPilotCalendar
         {
-            ViewBag.Message = "Your contact page.";
+            protected override void OnInit(InitArgs e)
+            {
+                Update(CallBackUpdateType.Full);
+            }
+            protected override void OnFinish()
+            {
+                if (UpdateType == CallBackUpdateType.None)
+                {
+                    return;
+                }
 
-            return View();
+                var db = new ConsultorioEntities();
+                Events = from ev in db.Consulta
+                         join med in db.Medico on ev.MedicoID equals med.PessoaID
+                         where !((ev.dataConsulta <= VisibleStart) || (ev.dataConsulta >= VisibleEnd))
+                         select new { ConsultaID = ev.ConsultaID, Nome = med.Nome, dataConsulta = ev.dataConsulta };
+                
+                DataIdField = "ConsultaID";
+                DataTextField = "Nome";
+                DataStartField = "dataConsulta";
+                DataEndField = "dataConsulta";
+            }
         }
     }
 }

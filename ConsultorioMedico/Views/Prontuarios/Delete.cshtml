@@ -1,0 +1,64 @@
+﻿@model ConsultorioMedico.Models.Prontuario
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Prontuario</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Consulta.ConsultaID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Consulta.ConsultaID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Exame.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Exame.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Medico.Login)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Medico.Login)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Paciente.Login)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Paciente.Login)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Informacoes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Informacoes)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -6,68 +6,70 @@
 <p>
     @Html.ActionLink("Criar Novo", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.ActionLink("ID", "Index", new { sortOrder = ViewBag.IDSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Nome do Paciente", "Index", new { sortOrder = ViewBag.NomeSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Nome do Medico", "Index", new { sortOrder = ViewBag.MedicoSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Data da Consulta", "Index", new { sortOrder = ViewBag.DataSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Especialidade", "Index", new { sortOrder = ViewBag.EspecialidadeSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Convenio", "Index", new { sortOrder = ViewBag.ConvenioSortParm })
-        </th>
-        <th>
-            @Html.ActionLink("Atendente", "Index", new { sortOrder = ViewBag.AtendenteSortParm })
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<div class="table-responsive">
+    <table class="table table-hover">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ConsultaID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Paciente.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Medico.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.dataConsulta)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Especialidade.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Convenio.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Atendente.Nome)
-            </td>
-            <td>
-                @Html.ActionLink("Editar", "Edit", new { id = item.ConsultaID }) |
-                @Html.ActionLink("Detalhes", "Details", new { id = item.ConsultaID }) |
-                @Html.ActionLink("Deletar", "Delete", new { id = item.ConsultaID })
-            </td>
+            <th>
+                @Html.ActionLink("ID", "Index", new { sortOrder = ViewBag.IDSortParm, @scope = "col" })
+            </th>
+            <th>
+                @Html.ActionLink("Nome do Paciente", "Index", new { sortOrder = ViewBag.NomeSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Nome do Medico", "Index", new { sortOrder = ViewBag.MedicoSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Data e Hora da Consulta", "Index", new { sortOrder = ViewBag.DataSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Especialidade", "Index", new { sortOrder = ViewBag.EspecialidadeSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Convenio", "Index", new { sortOrder = ViewBag.ConvenioSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Atendente", "Index", new { sortOrder = ViewBag.AtendenteSortParm })
+            </th>
+            <th></th>
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConsultaID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Paciente.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Medico.Nome)
+                </td>
+                <td>
+                    @(item.dataConsulta.Date + item.horarioConsulta.TimeOfDay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Especialidade.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Convenio.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Atendente.Nome)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.ConsultaID }) |
+                    @Html.ActionLink("Detalhes", "Details", new { id = item.ConsultaID }) |
+                    @Html.ActionLink("Deletar", "Delete", new { id = item.ConsultaID })
+                </td>
+            </tr>
+        }
+
+    </table>
 <br />
 Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("Index",
     new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+</div>
 

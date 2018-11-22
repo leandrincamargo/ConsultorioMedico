@@ -55,7 +55,7 @@ namespace ConsultorioMedico.Controllers
                     convenios = convenios.OrderBy(s => s.Nome);
                     break;
             }
-            int pageSize = 3;
+            int pageSize = 30;
             int pageNumber = (page ?? 1);
             return View(convenios.ToPagedList(pageNumber, pageSize));
         }

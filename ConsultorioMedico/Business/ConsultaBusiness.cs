@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using ConsultorioMedico.Models;
@@ -31,7 +32,7 @@ namespace ConsultorioMedico.Business
                 Horarios.Add(horarioConsulta);
                 horarioConsulta = horarioConsulta.Add(new TimeSpan(0, 30, 0));
             }
-            var horariosMarcados = db.Consulta.Where(c => c.MedicoID == _medicoID && c.dataConsulta == _dia).Select(c => c.horarioConsulta).ToList();
+            var horariosMarcados = db.Consulta.Where(c => c.MedicoID == _medicoID && DbFunctions.TruncateTime(c.dataConsulta) == _dia.Date).Select(c => c.horarioConsulta).ToList();
             foreach (var item in horariosMarcados)
             {
                 Horarios.Remove(item.TimeOfDay);
