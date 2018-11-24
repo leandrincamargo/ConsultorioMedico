@@ -143,14 +143,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201811210142201_inicial.cs" />
-    <Compile Include="Migrations\201811210142201_inicial.Designer.cs">
-      <DependentUpon>201811210142201_inicial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201811242037082_prontuario.cs" />
-    <Compile Include="Migrations\201811242037082_prontuario.Designer.cs">
-      <DependentUpon>201811242037082_prontuario.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Atendente.cs" />
     <Compile Include="Models\Cargo.cs" />
@@ -320,14 +312,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201811210142201_inicial.resx">
-      <DependentUpon>201811210142201_inicial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201811242037082_prontuario.resx">
-      <DependentUpon>201811242037082_prontuario.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
