@@ -63,16 +63,6 @@ namespace ConsultorioMedico.Models
                 .HasRequired<Exame>(s => s.Exame)
                 .WithMany(g => g.Prontuario)
                 .HasForeignKey<int>(s => s.ExameID);
-
-            modelBuilder.Entity<Prontuario>()
-                .HasRequired<Medico>(s => s.Medico)
-                .WithMany(g => g.Prontuario)
-                .HasForeignKey<int>(s => s.MedicoID);
-
-            modelBuilder.Entity<Prontuario>()
-                .HasRequired<Paciente>(s => s.Paciente)
-                .WithMany(g => g.Prontuario)
-                .HasForeignKey<int>(s => s.PacienteID);
         }
 
         public virtual DbSet<Pessoa> Pessoa { get; set; }

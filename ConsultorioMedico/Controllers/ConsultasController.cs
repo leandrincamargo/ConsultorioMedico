@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using ConsultorioMedico.Models;
 using PagedList;
 using ConsultorioMedico.Business;
+using Newtonsoft.Json;
 
 namespace ConsultorioMedico.Controllers
 {
@@ -182,6 +183,15 @@ namespace ConsultorioMedico.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            //Retorna o valor em JSON
+            var consultaBusiness = new ConsultaBusiness(consulta.dataConsulta, consulta.MedicoID);
+            List<SelectListItem> lista = new List<SelectListItem>();
+
+            foreach (var item in consultaBusiness.Horarios)
+            {
+                lista.Add(new SelectListItem { Selected = true, Text = item.ToString(), Value = item.ToString() });
+            }
+            ViewBag.horarioConsulta = new SelectList(consultaBusiness.Horarios);
             ViewBag.MedicoID = new SelectList(db.Medico, "PessoaID", "Nome", consulta.MedicoID);
             ViewBag.PacienteID = new SelectList(db.Paciente, "PessoaID", "Nome", consulta.PacienteID);
             ViewBag.EspecialidadeID = new SelectList(db.Especialidade, "EspecialidadeID", "Nome", consulta.EspecialidadeID);
@@ -231,17 +241,23 @@ namespace ConsultorioMedico.Controllers
             return Json(db.Medico.Where(e => e.EspecialidadeID == id).Select(e => new { Text = e.Nome, Value = e.PessoaID }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult ObterHorario(int medicoId, DateTime dataConsulta)
+        public JsonResult ObterHorario(int medicoId, DateTime dataConsulta, int? consultaId)
         {
             //Retorna o valor em JSON
             var consulta = new ConsultaBusiness(dataConsulta, medicoId);
             List<SelectListItem> lista = new List<SelectListItem>();
-
             foreach (var item in consulta.Horarios)
             {
                 lista.Add(new SelectListItem { Selected = true, Text = item.ToString(), Value = item.ToString() });
             }
-            var saida = new SelectList(lista, "Value", "Text");               
+            if (consultaId.HasValue)
+            {
+                Consulta aux = db.Consulta.Where(c => c.ConsultaID == consultaId).First();
+                if (aux.dataConsulta.Date == dataConsulta.Date)
+                    lista.Add(new SelectListItem { Selected = false, Text = aux.horarioConsulta.TimeOfDay.ToString(), Value = aux.horarioConsulta.TimeOfDay.ToString() });
+            }
+            var ordenado = lista.OrderBy(l => l.Text);
+            var saida = new SelectList(ordenado, "Value", "Text");               
             ViewBag.horarioConsulta = new SelectList(consulta.Horarios);
             return Json(saida, JsonRequestBehavior.AllowGet);
         //return Json(db.Medico.Where(e => e.EspecialidadeID == id).Select(e => new { Text = e.Nome, Value = e.PessoaID }), JsonRequestBehavior.AllowGet);

@@ -135,6 +135,7 @@
     <Compile Include="Controllers\ConsultasController.cs" />
     <Compile Include="Controllers\ConveniosController.cs" />
     <Compile Include="Controllers\EspecialidadesController.cs" />
+    <Compile Include="Controllers\ExamesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MedicosController.cs" />
     <Compile Include="Controllers\PacientesController.cs" />
@@ -145,6 +146,10 @@
     <Compile Include="Migrations\201811210142201_inicial.cs" />
     <Compile Include="Migrations\201811210142201_inicial.Designer.cs">
       <DependentUpon>201811210142201_inicial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811242037082_prontuario.cs" />
+    <Compile Include="Migrations\201811242037082_prontuario.Designer.cs">
+      <DependentUpon>201811242037082_prontuario.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Atendente.cs" />
@@ -186,6 +191,8 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Scripts\Consultorio\Consulta.js" />
+    <Content Include="Scripts\Consultorio\Prontuarios.js" />
     <Content Include="Scripts\DayPilot\daypilot-all.min.js" />
     <Content Include="Scripts\DayPilot\min\daypilot-calendar.min.js" />
     <Content Include="Scripts\DayPilot\min\daypilot-common.min.js" />
@@ -296,6 +303,12 @@
     <Content Include="Views\Prontuarios\Details.cshtml" />
     <Content Include="Views\Prontuarios\Edit.cshtml" />
     <Content Include="Views\Prontuarios\Index.cshtml" />
+    <Content Include="Views\Prontuarios\PartialConsulta.cshtml" />
+    <Content Include="Views\Exames\Create.cshtml" />
+    <Content Include="Views\Exames\Delete.cshtml" />
+    <Content Include="Views\Exames\Details.cshtml" />
+    <Content Include="Views\Exames\Edit.cshtml" />
+    <Content Include="Views\Exames\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -311,6 +324,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201811210142201_inicial.resx">
       <DependentUpon>201811210142201_inicial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811242037082_prontuario.resx">
+      <DependentUpon>201811242037082_prontuario.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -1,25 +1,21 @@
 ﻿@model ConsultorioMedico.Models.Prontuario
 
-@{
-    ViewBag.Title = "Details";
-}
-
-<h2>Details</h2>
+<h2>Detalhes</h2>
 
 <div>
     <h4>Prontuario</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Consulta.ConsultaID)
+            ID
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Consulta.ConsultaID)
+            @Html.DisplayFor(model => model.ProntuarioID)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Exame.Nome)
+            Exame
         </dt>
 
         <dd>
@@ -27,19 +23,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Medico.Login)
+            Medico
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Medico.Login)
+            @Html.DisplayFor(model => model.Consulta.Medico.Nome)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Paciente.Login)
+            Paciente
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Paciente.Login)
+            @Html.DisplayFor(model => model.Consulta.Paciente.Nome)
         </dd>
 
         <dt>
@@ -53,6 +49,7 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ProntuarioID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editar", "Edit", new { id = Model.ProntuarioID }) |
+    @Html.ActionLink("Deletar", "Delete", new { id = Model.ProntuarioID }) |
+    @Html.ActionLink("Voltar para Lista", "Index")
 </p>
