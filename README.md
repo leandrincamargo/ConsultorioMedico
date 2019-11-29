@@ -14,5 +14,4 @@ Utilizado Entity Framework e Razor
 * Proprietária
 
 ## Contato
-* Email: [leandrocamaargo@hotmail.com](mailto:leandrocamaargo@hotmail.com)
 * Linkedin: [Leandro Camargo da Veiga](https://br.linkedin.com/in/leandro-camargo-da-veiga-7b135810b)
